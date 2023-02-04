@@ -39,7 +39,7 @@ macro_rules! comp_iter_def {
                 let entity_id = self.vec.pop()?;
 
                 return Some((entity_id,
-                            $(self.ecs.get_mut::<$type_name>(entity_id).unwrap()),+
+                            $(self.ecs.get_mut::<$type_name>(entity_id)),+
                 )
                 );
             }
@@ -47,10 +47,10 @@ macro_rules! comp_iter_def {
         #[allow(unused_parens)]
         impl CompStorage{
             pub fn $get_name<$($type_name : 'static + Serialize + Clone + DeserializeOwned + Send + Debug),+>(&self, entity_id: GlobalEntityID) -> ($(Option<&mut $type_name>),+){
-                return ($(self.get_mut::<$type_name>(entity_id)),+ );
+                return ($(self.get_mut_maybe::<$type_name>(entity_id)),+ );
             }
             pub fn $get_name_unwrap<$($type_name : 'static + Serialize + Clone + DeserializeOwned + Send + Debug),+>(&self, entity_id: GlobalEntityID) -> ($(&mut $type_name),+){
-                return ($(self.get_mut::<$type_name>(entity_id).unwrap()),+ );
+                return ($(self.get_mut::<$type_name>(entity_id)),+ );
             }
         }
         #[allow(unused_parens, non_snake_case)]

@@ -33,15 +33,12 @@ impl<S> VelvetEcs<S> {
         self.systems = systems;
     }
     pub fn sim_systems(&mut self, stat: &S){
+        self.c.flush_ent_changes();
         for system in &self.systems{
-            self.c.flush_ent_changes();
             (system.run)(&mut self.c, stat);
             self.c.flush_ent_changes();
         }
-
-        // self.debug_times.print_all();
     }
-
 }
 
 impl<S> Hash for VelvetEcs<S> {
